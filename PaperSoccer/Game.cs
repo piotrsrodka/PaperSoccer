@@ -79,7 +79,7 @@ namespace PaperSoccer
 
         private void ComputerMove()
         {
-            var bfs = new Bfs(Field, Field.Vertex(CurrentPosition));
+            var bfs = new BreadthFirstSearch(Field, Field.Vertex(CurrentPosition));
             var goal = new Point(Width / 2, Height + 1);
             Stack<int> pathToGoal = bfs.PathTo(Field.Vertex(goal));
 

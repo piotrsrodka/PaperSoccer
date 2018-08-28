@@ -48,7 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bfs.cs" />
+    <Compile Include="BreadthFirstSearch.cs" />
     <Compile Include="Edge.cs" />
     <Compile Include="Enums\PlayerOrder.cs" />
     <Compile Include="Enums\WonBy.cs" />
