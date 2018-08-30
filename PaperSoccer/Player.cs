@@ -6,6 +6,7 @@ namespace PaperSoccer
     {
         public PlayerOrder Order { get; set; }
         public PlayerNature Nature { get; set; }
+        public string Name { get; set; }
 
         public Player()
         {

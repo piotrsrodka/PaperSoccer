@@ -19,7 +19,7 @@ namespace PaperSoccer
         public Field Field { get; set; }
         public Player Player { get; set; }
         public Point CurrentPosition { get; set; }
-        public Move LastMove { get; set; }
+        public List<Move> LastMoves { get; set; }
         public WonBy WonBy { get; set; }
         public List<Move> MovesHistory { get; set; }
 
@@ -35,7 +35,7 @@ namespace PaperSoccer
             Field = new Field(width, height);
             CurrentPosition = Field.MiddlePoint;
             MovesHistory = new List<Move>();
-            LastMove = new Move();
+            LastMoves = new List<Move>();
         }
 
         public void PlayerMove(Point to)
@@ -51,8 +51,9 @@ namespace PaperSoccer
             var from = CurrentPosition;
             Field.RemoveEdge(Field.Vertex(from), Field.Vertex(to));
             CurrentPosition = to;
-            LastMove = new Move(Player.Order, to, from);
-            MovesHistory.Add(LastMove);
+            LastMoves.Clear();
+            LastMoves.Add(new Move(Player.Order, to, from));
+            MovesHistory.AddRange(LastMoves);
             VictoryConditions(to);
 
             if (IsGameOver)
@@ -68,19 +69,14 @@ namespace PaperSoccer
 
                 IsComputerTurn = Player.Order == PlayerOrder.Second &&
                                   Player.Nature == PlayerNature.Computer;
-
-                if (IsComputerTurn)
-                {
-                    ComputerMove();
-                }
             }
         }
 
-        private void ComputerMove()
+        public void ComputerMove()
         {
-            var bfs = new BreadthFirstSearch(Field, Field.Vertex(CurrentPosition));
             var goal = new Point(Width / 2, Height + 1);
-            Stack<int> pathToGoal = bfs.PathTo(Field.Vertex(goal));
+            IComputer computer = new Walter();
+            Stack<int> pathToGoal = computer.GetPathToGoal(Field, CurrentPosition, goal);
 
             if (pathToGoal == null)
             {
@@ -94,7 +90,9 @@ namespace PaperSoccer
             int pop = pathToGoal.Pop();
             pop = pathToGoal.Pop();
 
+            LastMoves.Clear();
             MoveComputer(CurrentPosition, Field.Position(pop), pathToGoal);
+            MovesHistory.AddRange(LastMoves);
 
             Player.Flip();
             NumberOfMoves++;
@@ -106,8 +104,8 @@ namespace PaperSoccer
         {
             Field.RemoveEdge(Field.Vertex(from), Field.Vertex(to));
             CurrentPosition = to;
-            LastMove = new Move(Player.Order, to, from);
-            MovesHistory.Add(LastMove);
+            LastMoves.Add(new Move(Player.Order, to, from));
+            
             VictoryConditions(to);
 
             if (IsGameOver)

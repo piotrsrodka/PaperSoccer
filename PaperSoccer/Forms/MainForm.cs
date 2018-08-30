@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Windows.Forms;
 using PaperSoccer.Enums;
 using PaperSoccer.Properties;
@@ -26,6 +27,36 @@ namespace PaperSoccer.Forms
         {
             _game = new Game(width, height, playerNature);
             SetGraphics();
+            FormatMoveText(_game.NumberOfMoves);
+        }
+
+        private void paperSoccerPanel_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Left ||
+                !_paperGraphics.Hotspots.Any(h => h.Contains(e.Location)))
+            {
+                return;
+            }
+
+            var hotspot = _paperGraphics.Hotspots.Single(h => h.Contains(e.Location));
+            var clickedPosition = new Point(hotspot.Right, hotspot.Bottom);
+            var selectedPosition = _paperGraphics.FieldPosition(clickedPosition);
+
+            _game.PlayerMove(selectedPosition);
+            UpdateMove();
+
+            if (_game.IsComputerTurn)
+            {
+                Thread.Sleep(250);
+                _game.ComputerMove();
+                UpdateMove();
+            }
+        }
+
+        private void UpdateMove()
+        {
+            _paperGraphics.DrawLastMoves(paperSoccerPanel.CreateGraphics());
+            pictureBox.Location = _paperGraphics.GetBallLocation(pictureBox.Width);
             FormatMoveText(_game.NumberOfMoves);
         }
 
@@ -80,24 +111,6 @@ namespace PaperSoccer.Forms
         private void paperSoccerPanel_Paint(object sender, PaintEventArgs e)
         {
             _paperGraphics.DrawField(e.Graphics);
-        }
-
-        private void paperSoccerPanel_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (e.Button != MouseButtons.Left ||
-                !_paperGraphics.Hotspots.Any(h => h.Contains(e.Location)))
-            {
-                return;
-            }
-
-            var hotspot = _paperGraphics.Hotspots.Single(h => h.Contains(e.Location));
-            var clickedPosition = new Point(hotspot.Right, hotspot.Bottom);
-            var selectedPosition = _paperGraphics.FieldPosition(clickedPosition);
-
-            _game.PlayerMove(selectedPosition);
-            _paperGraphics.DrawMovesHistory(paperSoccerPanel.CreateGraphics());
-            pictureBox.Location = _paperGraphics.GetBallLocation(pictureBox.Width);
-            FormatMoveText(_game.NumberOfMoves);
         }
 
         private void paperSoccerPanel_MouseMove(object sender, MouseEventArgs e)

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Threading;
 using PaperSoccer.Enums;
-using PaperSoccer.Properties;
 
 namespace PaperSoccer
 {
@@ -36,6 +36,18 @@ namespace PaperSoccer
         {
             foreach (var move in _game.MovesHistory)
             {
+                DrawMove(move, graphics);
+            }
+        }
+
+        public void DrawLastMoves(Graphics graphics)
+        {
+            bool isComputerBulk = _game.LastMoves.Count > 1;
+
+            foreach (var move in _game.LastMoves)
+            {
+                if (isComputerBulk) Thread.Sleep(100);
+
                 DrawMove(move, graphics);
             }
         }
