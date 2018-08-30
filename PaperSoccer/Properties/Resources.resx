@@ -127,4 +127,7 @@
   <data name="MainForm_StartNewGame_Moves__" xml:space="preserve">
     <value>Moves  </value>
   </data>
+  <data name="MainForm_NoMoves" xml:space="preserve">
+    <value>Just do it!</value>
+  </data>
 </root>

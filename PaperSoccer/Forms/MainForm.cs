@@ -22,18 +22,18 @@ namespace PaperSoccer.Forms
             new NewGame(_game).ShowDialog(this);
         }
 
+        public void StartNewGame(int width, int height, PlayerNature playerNature)
+        {
+            _game = new Game(width, height, playerNature);
+            SetGraphics();
+            FormatMoveText(_game.NumberOfMoves);
+        }
+
         private void GetRidOfPanelFlickering()
         {
             typeof(Panel).InvokeMember("DoubleBuffered",
             BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic,
             null, paperSoccerPanel, new object[] { true });
-        }
-
-        public void StartNewGame(int width, int height, PlayerNature playerNature)
-        {
-            _game = new Game(width, height, playerNature);
-            SetGraphics();
-            moves.Text = FormatMoveText();
         }
 
         private void MenuNew_Click(object sender, EventArgs e)
@@ -45,21 +45,26 @@ namespace PaperSoccer.Forms
         {
             _game = new Game(_game.Width, _game.Height, _game.Player.Nature);
             SetGraphics();
-            moves.Text = FormatMoveText();
+            FormatMoveText(_game.NumberOfMoves);
         }
 
         private void SetGraphics()
         {
             _paperGraphics = new PaperGraphics(_game, paperSoccerPanel.Width, paperSoccerPanel.Height);
-            _paperGraphics.SetHotspotsList();
             pictureBox.Location = _paperGraphics.GetBallLocation(pictureBox.Width);
             paperSoccerPanel.Invalidate();
         }
 
-        private string FormatMoveText()
+        private void FormatMoveText(int numberOfMoves)
         {
-            int moves = _game == null ? 0 : _game.NumberOfMoves;
-            return string.Format("{0}{1}", Resources.MainForm_StartNewGame_Moves__, moves);
+            if (numberOfMoves > 0)
+            {
+                moves.Text = string.Format("{0}{1}", Resources.MainForm_StartNewGame_Moves__, numberOfMoves);
+            }
+            else
+            {
+                moves.Text = Resources.MainForm_NoMoves;
+            }
         }
 
         private void MainForm_SizeChanged(object sender, EventArgs e)
@@ -88,10 +93,11 @@ namespace PaperSoccer.Forms
             var hotspot = _paperGraphics.Hotspots.Single(h => h.Contains(e.Location));
             var clickedPosition = new Point(hotspot.Right, hotspot.Bottom);
             var selectedPosition = _paperGraphics.FieldPosition(clickedPosition);
+
             _game.PlayerMove(selectedPosition);
             _paperGraphics.DrawMovesHistory(paperSoccerPanel.CreateGraphics());
             pictureBox.Location = _paperGraphics.GetBallLocation(pictureBox.Width);
-            moves.Text = FormatMoveText();
+            FormatMoveText(_game.NumberOfMoves);
         }
 
         private void paperSoccerPanel_MouseMove(object sender, MouseEventArgs e)

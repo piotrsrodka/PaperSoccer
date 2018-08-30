@@ -4,16 +4,17 @@ using System.Linq;
 
 namespace PaperSoccer
 {
-    /*
-     * Field is a special kind of Graph.
+    /* Field is a special kind of Graph.
      * Connection are only initialized beetween geometric adjacent points
      */
 
     public class Field : Graph
     {
         private readonly int _width;
+
         public int Width { get; private set; }
         public int Height { get; private set; }
+        public Point MiddlePoint => new Point(Width / 2, Height / 2);
 
         public Field(int width, int height) : base((width + 3) * (height + 3))
         {
@@ -51,6 +52,41 @@ namespace PaperSoccer
             AddEdge(Vertex(width - 1, height), Vertex(width, height - 1));
         }
 
+        public int Vertex(int x, int y)
+        {
+            return (x + 1) + (y + 1) * _width;
+        }
+
+        public int Vertex(Point a)
+        {
+            return Vertex(a.X, a.Y);
+        }
+
+        public Point Position(int v)
+        {
+            return new Point((v % _width) - 1, v / _width - 1);
+        }
+
+        public List<Point> PossibleMoves(Point position)
+        {
+            return GetAdjacencyList(Vertex(position)).Select(Position).ToList();
+        }
+
+        public int DegreeOf(Point point)
+        {
+            return base.DegreeOf(Vertex(point));
+        }
+
+        public bool IsMoveIntoTheVoid(Point to)
+        {
+            return DegreeOf(to) == 7; // first visit - can't bump
+        }
+
+        public bool IsStalemate(Point to, Point @from)
+        {
+            return !ExistEdge(Vertex(@from), Vertex(to));
+        }
+
         private void InnerMesh(int width, int height)
         {
             for (int x = 1; x < width; x++)
@@ -63,21 +99,6 @@ namespace PaperSoccer
                     }
                 }
             }
-        }
-
-        public int Vertex(int x, int y)
-        {
-            return (x + 1) + (y + 1) * _width;
-        }
-
-        public int Vertex(Point a)
-        {
-            return Vertex(a.X, a.Y);           
-        }
-
-        public Point Position(int v)
-        {
-            return new Point(v % _width - 1, v / _width - 1);
         }
 
         private IEnumerable<Point> Neighbours(Point position)
@@ -94,35 +115,6 @@ namespace PaperSoccer
                 new Point(position.X - 1, position.Y - 1)
             };
             return positionList;
-        }
-
-        public List<Point> PossibleMoves(Point position)
-        {
-            return GetAdjacencyList(Vertex(position)).Select(Position).ToList();
-        }
-
-
-        public Point MiddlePoint
-        {
-            get
-            {
-                return new Point(Width / 2, Height / 2);
-            }
-        }
-
-        public int DegreeOf(Point point)
-        {
-            return base.DegreeOf(Vertex(point));
-        }
-
-        public bool IsMoveIntoTheVoid(Point to)
-        {
-            return DegreeOf(to) == 7; // first visit - can't bump
-        }
-
-        public bool IsStalemate(Point to, Point @from)
-        {
-            return !ExistEdge(Vertex(@from), Vertex(to));
         }
     }
 }

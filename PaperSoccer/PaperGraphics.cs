@@ -12,13 +12,15 @@ namespace PaperSoccer
         private int _height;
         private Game _game;
 
+        private const float DotSize = 5f;
         private readonly Color FirstPlayerColor = Color.DeepSkyBlue;
         private readonly Color SecondPlayerColor = Color.DarkOrange;
         private readonly Brush FirstPlayerBrush = Brushes.DeepSkyBlue;
         private readonly Brush SecondPlayerBrush = Brushes.DarkOrange;
         private readonly Pen FieldGridLinePen = new Pen(Color.LightBlue, 1.0f);
         private readonly Pen FieldOutLinePen = new Pen(Color.DimGray, 3.0f);
-        private const float DotSize = 5f;
+
+        /* Graphical API */
 
         public List<Rectangle> Hotspots { get; private set; }
 
@@ -28,132 +30,6 @@ namespace PaperSoccer
             _width = width;
             _height = height;
             SetHotspotsList();
-        }
-
-        private int PaperSquareSize
-        {
-            get
-            {
-                if (_game.Field.Width + 2 == 0) return 10;
-                return (int)(1.00 * _width / (_game.Field.Width + 2));
-            }
-        }
-
-        public Brush GetPlayerBrush(PlayerOrder playerDescription)
-        {
-            return playerDescription == PlayerOrder.First
-                ? FirstPlayerBrush
-                : SecondPlayerBrush;
-        }
-
-        public void DrawField(Graphics graphics)
-        {
-            DrawGrid(graphics);
-            DrawFieldOutline(graphics);
-            DrawMovesHistory(graphics);
-            DrawConnections(graphics);
-            DrawVerticesNumbers(graphics);
-        }
-
-        private void DrawPoint(Point where, float dot, Brush brush, Graphics graphics)
-        {
-            graphics.FillEllipse(brush,
-                PaperSquareSize * (where.X + 1) - dot / 2,
-                PaperSquareSize * (where.Y + 2) - dot / 2,
-                dot,
-                dot);
-        }
-
-        public Point GetBallLocation(int ballSize)
-        {
-            return new Point(PaperSquareSize * (_game.CurrentPosition.X + 1) - ballSize / 2,
-                PaperSquareSize * (_game.CurrentPosition.Y + 2) - ballSize / 2);
-        }
-
-        public void SetHotspotsList()
-        {
-            var hotspots = new List<Rectangle>();
-
-            int hotSpotSize = PaperSquareSize / 2;
-            int hotSpotSize2 = hotSpotSize / 2;
-
-            var position = _game.CurrentPosition;
-
-            foreach (var possiblePosition in _game.Field.PossibleMoves(position))
-            {
-                var pixelPossiblePosition = DrawingPosition(possiblePosition);
-
-                hotspots.Add(new Rectangle(
-                    pixelPossiblePosition.X - hotSpotSize2,
-                    pixelPossiblePosition.Y - hotSpotSize2,
-                    hotSpotSize,
-                    hotSpotSize));
-            }
-
-            Hotspots = hotspots;
-        }
-
-        public void DrawGrid(Graphics graphics)
-        {
-            Point start;
-            Point end;
-            var paperSquareSize = PaperSquareSize;
-
-            for (int x = paperSquareSize; x < _width; x += paperSquareSize)
-            {
-                start = new Point(x, 0);
-                end = new Point(x, _height);
-                graphics.DrawLine(FieldGridLinePen, start, end);
-            }
-
-            for (int y = paperSquareSize; y < _height; y += paperSquareSize)
-            {
-                start = new Point(0, y);
-                end = new Point(_width, y);
-                graphics.DrawLine(FieldGridLinePen, start, end);
-            }
-        }
-
-        public void DrawFieldOutline(Graphics graphics)
-        {
-            var points = new List<Point>
-            {
-                DrawingPosition(0, 0),
-                DrawingPosition(_game.Field.Width/2 - 1, 0),
-                DrawingPosition(_game.Field.Width/2 - 1, -1),
-                DrawingPosition(_game.Field.Width/2 + 1, -1),
-                DrawingPosition(_game.Field.Width/2 + 1, 0),
-                DrawingPosition(_game.Field.Width, 0),
-                DrawingPosition(_game.Field.Width, _game.Field.Height),
-                DrawingPosition(_game.Field.Width/2 + 1, _game.Field.Height),
-                DrawingPosition(_game.Field.Width/2 + 1, _game.Field.Height + 1),
-                DrawingPosition(_game.Field.Width/2 - 1, _game.Field.Height + 1),
-                DrawingPosition(_game.Field.Width/2 - 1, _game.Field.Height),
-                DrawingPosition(0, _game.Field.Height),
-                DrawingPosition(0, 0)
-            };
-
-            graphics.DrawLines(FieldOutLinePen, points.ToArray());
-
-            const float dot = DotSize;
-
-            graphics.FillEllipse(Brushes.Black, PaperSquareSize * (_game.Field.Width / 2 + 1) - dot / 2,
-                PaperSquareSize * (_game.Field.Height / 2 + 2) - dot / 2, dot, dot);
-        }
-
-        public Point DrawingPosition(int x, int y)
-        {
-            return new Point(PaperSquareSize * (x + 1), PaperSquareSize * (y + 2));
-        }
-
-        public Point DrawingPosition(Point p)
-        {
-            return new Point(PaperSquareSize * (p.X + 1), PaperSquareSize * (p.Y + 2));
-        }
-
-        public Point FieldPosition(Point p)
-        {
-            return new Point(p.X / PaperSquareSize - 1, p.Y / PaperSquareSize - 2);
         }
 
         public void DrawMovesHistory(Graphics graphics)
@@ -183,6 +59,130 @@ namespace PaperSoccer
             }
         }
 
+        public void DrawField(Graphics graphics)
+        {
+            DrawGrid(graphics);
+            DrawFieldOutline(graphics);
+            DrawMovesHistory(graphics);
+            DrawConnections(graphics);
+            DrawVerticesNumbers(graphics);
+        }
+
+        public Point GetBallLocation(int ballSize)
+        {
+            return new Point(GetPaperSquareSize() * (_game.CurrentPosition.X + 1) - ballSize / 2,
+                GetPaperSquareSize() * (_game.CurrentPosition.Y + 2) - ballSize / 2);
+        }
+
+        public Point FieldPosition(Point p)
+        {
+            return new Point(p.X / GetPaperSquareSize() - 1, p.Y / GetPaperSquareSize() - 2);
+        }
+
+        /* API ends */
+
+        private void SetHotspotsList()
+        {
+            var hotspots = new List<Rectangle>();
+
+            int hotSpotSize = GetPaperSquareSize() / 2;
+            int hotSpotSize2 = hotSpotSize / 2;
+
+            var position = _game.CurrentPosition;
+
+            foreach (var possiblePosition in _game.Field.PossibleMoves(position))
+            {
+                var pixelPossiblePosition = DrawingPosition(possiblePosition);
+
+                hotspots.Add(new Rectangle(
+                    pixelPossiblePosition.X - hotSpotSize2,
+                    pixelPossiblePosition.Y - hotSpotSize2,
+                    hotSpotSize,
+                    hotSpotSize));
+            }
+
+            Hotspots = hotspots;
+        }
+
+        private Brush GetPlayerBrush(PlayerOrder playerDescription)
+        {
+            return playerDescription == PlayerOrder.First
+                ? FirstPlayerBrush
+                : SecondPlayerBrush;
+        }
+
+        private void DrawPoint(Point where, float dot, Brush brush, Graphics graphics)
+        {
+            graphics.FillEllipse(brush,
+                GetPaperSquareSize() * (where.X + 1) - dot / 2,
+                GetPaperSquareSize() * (where.Y + 2) - dot / 2,
+                dot,
+                dot);
+        }
+
+        private int GetPaperSquareSize()
+        {
+            if (_game.Field.Width + 2 == 0) return 10;
+            return (int)(1.00 * _width / (_game.Field.Width + 2));
+        }
+
+        private void DrawGrid(Graphics graphics)
+        {
+            Point start;
+            Point end;
+
+            for (int x = GetPaperSquareSize(); x < _width; x += GetPaperSquareSize())
+            {
+                start = new Point(x, 0);
+                end = new Point(x, _height);
+                graphics.DrawLine(FieldGridLinePen, start, end);
+            }
+
+            for (int y = GetPaperSquareSize(); y < _height; y += GetPaperSquareSize())
+            {
+                start = new Point(0, y);
+                end = new Point(_width, y);
+                graphics.DrawLine(FieldGridLinePen, start, end);
+            }
+        }
+
+        private void DrawFieldOutline(Graphics graphics)
+        {
+            var points = new List<Point>
+            {
+                DrawingPosition(0, 0),
+                DrawingPosition(_game.Field.Width/2 - 1, 0),
+                DrawingPosition(_game.Field.Width/2 - 1, -1),
+                DrawingPosition(_game.Field.Width/2 + 1, -1),
+                DrawingPosition(_game.Field.Width/2 + 1, 0),
+                DrawingPosition(_game.Field.Width, 0),
+                DrawingPosition(_game.Field.Width, _game.Field.Height),
+                DrawingPosition(_game.Field.Width/2 + 1, _game.Field.Height),
+                DrawingPosition(_game.Field.Width/2 + 1, _game.Field.Height + 1),
+                DrawingPosition(_game.Field.Width/2 - 1, _game.Field.Height + 1),
+                DrawingPosition(_game.Field.Width/2 - 1, _game.Field.Height),
+                DrawingPosition(0, _game.Field.Height),
+                DrawingPosition(0, 0)
+            };
+
+            graphics.DrawLines(FieldOutLinePen, points.ToArray());
+
+            const float dot = DotSize;
+
+            graphics.FillEllipse(Brushes.Black, GetPaperSquareSize() * (_game.Field.Width / 2 + 1) - dot / 2,
+                GetPaperSquareSize() * (_game.Field.Height / 2 + 2) - dot / 2, dot, dot);
+        }
+
+        private Point DrawingPosition(int x, int y)
+        {
+            return new Point(GetPaperSquareSize() * (x + 1), GetPaperSquareSize() * (y + 2));
+        }
+
+        private Point DrawingPosition(Point p)
+        {
+            return new Point(GetPaperSquareSize() * (p.X + 1), GetPaperSquareSize() * (p.Y + 2));
+        }
+
         private Pen GetPlayerPen(Move move)
         {
             return move.PlayerOrder == PlayerOrder.First
@@ -190,7 +190,7 @@ namespace PaperSoccer
                 : new Pen(SecondPlayerColor, 2.0f);
         }
 
-        public void GameOver(WonBy condition, Graphics graphics)
+        private void GameOver(WonBy condition, Graphics graphics)
         {
             var font = new Font(FontFamily.GenericSansSerif, 24f);
 
