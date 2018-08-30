@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Drawing;
 using PaperSoccer.Enums;
+using PaperSoccer.Properties;
 
 namespace PaperSoccer
 {
@@ -61,6 +62,12 @@ namespace PaperSoccer
                 PaperSquareSize * (where.Y + 2) - dot / 2,
                 dot,
                 dot);
+        }
+
+        public Point GetBallLocation(int ballSize)
+        {
+            return new Point(PaperSquareSize * (_game.CurrentPosition.X + 1) - ballSize / 2,
+                PaperSquareSize * (_game.CurrentPosition.Y + 2) - ballSize / 2);
         }
 
         public void SetHotspotsList()

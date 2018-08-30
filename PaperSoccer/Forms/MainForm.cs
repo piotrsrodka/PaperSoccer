@@ -15,16 +15,17 @@ namespace PaperSoccer.Forms
         public MainForm()
         {
             InitializeComponent();
-            labelPlayer1.Parent = pictureBox;
-            labelPlayer2.Parent = pictureBox;
+            labelPlayer1.Parent = paperSoccerPanel;
+            labelPlayer2.Parent = paperSoccerPanel;
             new NewGame(_game).ShowDialog(this);
         }
 
         public void StartNewGame(int width, int height, PlayerNature playerNature)
         {
             _game = new Game(width, height, playerNature);
-            _paperGraphics = new PaperGraphics(_game, pictureBox.Width, pictureBox.Height);
-            pictureBox.Invalidate();
+            _paperGraphics = new PaperGraphics(_game, paperSoccerPanel.Width, paperSoccerPanel.Height);
+            pictureBox.Location = _paperGraphics.GetBallLocation(pictureBox.Width);
+            paperSoccerPanel.Invalidate();
             moves.Text = FormatMoveText();
         }
 
@@ -36,8 +37,9 @@ namespace PaperSoccer.Forms
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _game = new Game(_game.Width, _game.Height, _game.Player.Nature);
-            _paperGraphics = new PaperGraphics(_game, pictureBox.Width, pictureBox.Height);
-            pictureBox.Invalidate();
+            _paperGraphics = new PaperGraphics(_game, paperSoccerPanel.Width, paperSoccerPanel.Height);
+            pictureBox.Location = _paperGraphics.GetBallLocation(pictureBox.Width);
+            paperSoccerPanel.Invalidate();
             moves.Text = FormatMoveText();
         }
 
@@ -47,46 +49,45 @@ namespace PaperSoccer.Forms
             return string.Format("{0}{1}", Resources.MainForm_StartNewGame_Moves__, moves);
         }
 
-        private void pictureBox_Paint(object sender, PaintEventArgs e)
-        {
-            _paperGraphics.DrawField(e.Graphics);
-        }
-
         private void MainForm_SizeChanged(object sender, EventArgs e)
         {
-            if (_paperGraphics != null)
-            {
-                _paperGraphics = new PaperGraphics(_game, pictureBox.Width, pictureBox.Height);
-                _paperGraphics.SetHotspotsList();
-            }
-        }
-
-        private void pictureBox_MouseClick(object sender, MouseEventArgs eventArgs)
-        {
-            if(eventArgs.Button != MouseButtons.Left ||
-                !_paperGraphics.Hotspots.Any(h => h.Contains(eventArgs.Location)))
-            {
-                return;
-            }
-
-            var hotspot = _paperGraphics.Hotspots.Single(h => h.Contains(eventArgs.Location));
-            var clickedPosition = new Point(hotspot.Right, hotspot.Bottom);
-            var selectedPosition = _paperGraphics.FieldPosition(clickedPosition);
-            
-            _game.PlayerMove(selectedPosition);
-            _paperGraphics.DrawMovesHistory(pictureBox.CreateGraphics());
-            moves.Text = FormatMoveText();
-        }
-
-        private void pictureBox_MouseMove(object sender, MouseEventArgs e)
-        {
-            var isInHotSpot = _paperGraphics.Hotspots.Any(s => s.Contains(e.Location));
-            Cursor = isInHotSpot ? Cursors.Hand : Cursors.Default;
+            _paperGraphics = new PaperGraphics(_game, paperSoccerPanel.Width, paperSoccerPanel.Height);
+            _paperGraphics.SetHotspotsList();
+            pictureBox.Location = _paperGraphics.GetBallLocation(pictureBox.Width);
+            paperSoccerPanel.Invalidate();
         }
 
         private void help_Click(object sender, EventArgs e)
         {
             new Help().Show();
+        }
+
+        private void paperSoccerPanel_Paint(object sender, PaintEventArgs e)
+        {
+            _paperGraphics.DrawField(e.Graphics);
+        }
+
+        private void paperSoccerPanel_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Left ||
+                !_paperGraphics.Hotspots.Any(h => h.Contains(e.Location)))
+            {
+                return;
+            }
+
+            var hotspot = _paperGraphics.Hotspots.Single(h => h.Contains(e.Location));
+            var clickedPosition = new Point(hotspot.Right, hotspot.Bottom);
+            var selectedPosition = _paperGraphics.FieldPosition(clickedPosition);
+            _game.PlayerMove(selectedPosition);
+            _paperGraphics.DrawMove(_game.LastMove ,paperSoccerPanel.CreateGraphics());
+            pictureBox.Location = _paperGraphics.GetBallLocation(pictureBox.Width);
+            moves.Text = FormatMoveText();
+        }
+
+        private void paperSoccerPanel_MouseMove(object sender, MouseEventArgs e)
+        {
+            var isInHotSpot = _paperGraphics.Hotspots.Any(s => s.Contains(e.Location));
+            Cursor = isInHotSpot ? Cursors.Hand : Cursors.Default;
         }
     }
 }

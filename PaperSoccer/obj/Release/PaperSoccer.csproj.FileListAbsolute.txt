@@ -1,7 +1,6 @@
 C:\Users\Piotr\Dropbox\Coding\Sources\PaperSoccer\PaperSoccer\bin\Release\PaperSoccer.exe.config
 c:\Users\Piotr\Dropbox\Coding\Sources\PaperSoccer\PaperSoccer\bin\Release\PaperSoccer.exe
 c:\Users\Piotr\Dropbox\Coding\Sources\PaperSoccer\PaperSoccer\bin\Release\PaperSoccer.pdb
-c:\Users\Piotr\Dropbox\Coding\Sources\PaperSoccer\PaperSoccer\obj\Release\PaperSoccer.csprojResolveAssemblyReference.cache
 c:\Users\Piotr\Dropbox\Coding\Sources\PaperSoccer\PaperSoccer\obj\Release\PaperSoccer.Help.resources
 c:\Users\Piotr\Dropbox\Coding\Sources\PaperSoccer\PaperSoccer\obj\Release\PaperSoccer.Forms.MainForm.resources
 c:\Users\Piotr\Dropbox\Coding\Sources\PaperSoccer\PaperSoccer\obj\Release\PaperSoccer.Forms.NewGame.resources
@@ -9,3 +8,5 @@ c:\Users\Piotr\Dropbox\Coding\Sources\PaperSoccer\PaperSoccer\obj\Release\PaperS
 c:\Users\Piotr\Dropbox\Coding\Sources\PaperSoccer\PaperSoccer\obj\Release\PaperSoccer.csproj.GenerateResource.Cache
 c:\Users\Piotr\Dropbox\Coding\Sources\PaperSoccer\PaperSoccer\obj\Release\PaperSoccer.exe
 c:\Users\Piotr\Dropbox\Coding\Sources\PaperSoccer\PaperSoccer\obj\Release\PaperSoccer.pdb
+C:\Users\Piotr\Dropbox\Coding\Sources\PaperSoccer\PaperSoccer\obj\Release\PaperSoccer.csprojAssemblyReference.cache
+C:\Users\Piotr\Dropbox\Coding\Sources\PaperSoccer\PaperSoccer\obj\Release\PaperSoccer.csproj.CoreCompileInputs.cache

@@ -112,7 +112,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Images\football.png" />
+    <EmbeddedResource Include="Images\football.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Images\football_incactive.png" />

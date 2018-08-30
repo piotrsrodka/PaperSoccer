@@ -37,8 +37,10 @@
             this.labelPlayer1 = new System.Windows.Forms.Label();
             this.labelPlayer2 = new System.Windows.Forms.Label();
             this.pictureBox = new System.Windows.Forms.PictureBox();
+            this.paperSoccerPanel = new System.Windows.Forms.Panel();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
+            this.paperSoccerPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -66,14 +68,14 @@
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(123, 26);
-            this.newToolStripMenuItem.Text = "New";
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(130, 26);
+            this.newToolStripMenuItem.Text = "Restart";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // MenuNew
             // 
             this.MenuNew.Name = "MenuNew";
-            this.MenuNew.Size = new System.Drawing.Size(123, 26);
+            this.MenuNew.Size = new System.Drawing.Size(130, 26);
             this.MenuNew.Text = "New...";
             this.MenuNew.Click += new System.EventHandler(this.MenuNew_Click);
             // 
@@ -98,7 +100,7 @@
             this.labelPlayer1.BackColor = System.Drawing.Color.Transparent;
             this.labelPlayer1.Font = new System.Drawing.Font("Consolas", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.labelPlayer1.ForeColor = System.Drawing.Color.DeepSkyBlue;
-            this.labelPlayer1.Location = new System.Drawing.Point(12, 576);
+            this.labelPlayer1.Location = new System.Drawing.Point(23, 593);
             this.labelPlayer1.Name = "labelPlayer1";
             this.labelPlayer1.Size = new System.Drawing.Size(135, 33);
             this.labelPlayer1.TabIndex = 2;
@@ -110,7 +112,7 @@
             this.labelPlayer2.BackColor = System.Drawing.Color.Transparent;
             this.labelPlayer2.Font = new System.Drawing.Font("Consolas", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.labelPlayer2.ForeColor = System.Drawing.Color.DarkOrange;
-            this.labelPlayer2.Location = new System.Drawing.Point(12, 40);
+            this.labelPlayer2.Location = new System.Drawing.Point(23, 12);
             this.labelPlayer2.Name = "labelPlayer2";
             this.labelPlayer2.Size = new System.Drawing.Size(135, 33);
             this.labelPlayer2.TabIndex = 3;
@@ -118,19 +120,29 @@
             // 
             // pictureBox
             // 
-            this.pictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox.Location = new System.Drawing.Point(0, 28);
+            this.pictureBox.Image = global::PaperSoccer.Properties.Resources.football;
+            this.pictureBox.ImageLocation = "";
+            this.pictureBox.Location = new System.Drawing.Point(225, 322);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(483, 638);
-            this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox.Size = new System.Drawing.Size(15, 15);
+            this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox.TabIndex = 0;
             this.pictureBox.TabStop = false;
-            this.pictureBox.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox_Paint);
-            this.pictureBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseClick);
-            this.pictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseMove);
+            // 
+            // paperSoccerPanel
+            // 
+            this.paperSoccerPanel.Controls.Add(this.labelPlayer2);
+            this.paperSoccerPanel.Controls.Add(this.labelPlayer1);
+            this.paperSoccerPanel.Controls.Add(this.pictureBox);
+            this.paperSoccerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.paperSoccerPanel.Location = new System.Drawing.Point(0, 28);
+            this.paperSoccerPanel.Name = "paperSoccerPanel";
+            this.paperSoccerPanel.Size = new System.Drawing.Size(483, 647);
+            this.paperSoccerPanel.TabIndex = 4;
+            this.paperSoccerPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.paperSoccerPanel_Paint);
+            this.paperSoccerPanel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.paperSoccerPanel_MouseClick);
+            this.paperSoccerPanel.MouseMove += new System.Windows.Forms.MouseEventHandler(this.paperSoccerPanel_MouseMove);
             // 
             // MainForm
             // 
@@ -138,9 +150,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(483, 675);
-            this.Controls.Add(this.labelPlayer2);
-            this.Controls.Add(this.labelPlayer1);
-            this.Controls.Add(this.pictureBox);
+            this.Controls.Add(this.paperSoccerPanel);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.MinimumSize = new System.Drawing.Size(300, 47);
@@ -151,6 +161,8 @@
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
+            this.paperSoccerPanel.ResumeLayout(false);
+            this.paperSoccerPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -167,6 +179,7 @@
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem help;
         private System.Windows.Forms.ToolStripMenuItem moves;
+        private System.Windows.Forms.Panel paperSoccerPanel;
     }
 }
 

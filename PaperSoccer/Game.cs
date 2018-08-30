@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using PaperSoccer.Enums;
-using System.Threading;
 
 namespace PaperSoccer
 {
@@ -20,7 +19,7 @@ namespace PaperSoccer
         public Field Field { get; set; }
         public Player Player { get; set; }
         public Point CurrentPosition { get; set; }
-        public Move Move { get; set; }
+        public Move LastMove { get; set; }
         public WonBy WonBy { get; set; }
         public List<Move> MovesHistory { get; set; }
 
@@ -36,7 +35,7 @@ namespace PaperSoccer
             Field = new Field(width, height);
             CurrentPosition = Field.MiddlePoint;
             MovesHistory = new List<Move>();
-            Move = new Move();
+            LastMove = new Move();
         }
 
         public void PlayerMove(Point to)
@@ -52,8 +51,8 @@ namespace PaperSoccer
             var from = CurrentPosition;
             Field.RemoveEdge(Field.Vertex(from), Field.Vertex(to));
             CurrentPosition = to;
-            Move = new Move(Player.Order, to, from);
-            MovesHistory.Add(Move);
+            LastMove = new Move(Player.Order, to, from);
+            MovesHistory.Add(LastMove);
             VictoryConditions(to);
 
             if (IsGameOver)
@@ -107,8 +106,8 @@ namespace PaperSoccer
         {
             Field.RemoveEdge(Field.Vertex(from), Field.Vertex(to));
             CurrentPosition = to;
-            Move = new Move(Player.Order, to, from);
-            MovesHistory.Add(new Move(Player.Order, to, from));
+            LastMove = new Move(Player.Order, to, from);
+            MovesHistory.Add(LastMove);
             VictoryConditions(to);
 
             if (IsGameOver)
