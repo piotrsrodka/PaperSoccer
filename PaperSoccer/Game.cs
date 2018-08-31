@@ -10,7 +10,6 @@ namespace PaperSoccer
         private const int DefaultHeight = 10;
 
         public bool IsGameOver { get; set; }
-        public bool IsComputerTurn { get; set; }
 
         public int Width { get; set; }
         public int Height { get; set; }
@@ -20,6 +19,7 @@ namespace PaperSoccer
         public Player PlayerOne { get; set; }
         public Player PlayerTwo { get; set; }
         public PlayerOrder PlayerTurn { get; set; }
+        public Player CurrentPlayer => PlayerTurn == PlayerOrder.First ? PlayerOne : PlayerTwo;
         public Point CurrentPosition { get; set; }
         public List<Move> LastMoves { get; set; }
         public WonBy WonBy { get; set; }
@@ -56,10 +56,9 @@ namespace PaperSoccer
             }
         }
 
-        public void PlayerMove(Point to)
+        public void HumanPlayerMove(Point to)
         {
             if (IsGameOver ||
-                IsComputerTurn ||
                 CurrentPosition.Equals(to) ||
                 Field.IsStalemate(to, CurrentPosition))
             {
@@ -84,15 +83,18 @@ namespace PaperSoccer
             {
                 Flip();
                 NumberOfMoves++;
-
-                IsComputerTurn = PlayerTurn == PlayerOrder.Second &&
-                                  PlayerTwo.Nature == PlayerNature.Computer;
             }
         }
 
         public void ComputerMove()
         {
-            var goal = new Point(Width / 2, Height + 1);
+            if (IsGameOver) return;
+
+            var bottomGoal = new Point(Width / 2, Height + 1);
+            var topGoal = new Point(Width / 2, -1);
+
+            var goal = PlayerTurn == PlayerOrder.First ? topGoal : bottomGoal;
+
             IComputer computer = new Walter();
             Stack<int> pathToGoal = computer.GetPathToGoal(Field, CurrentPosition, goal);
 
@@ -101,7 +103,6 @@ namespace PaperSoccer
                 Flip();
                 WonBy = WonBy.Block;
                 IsGameOver = true;
-                IsComputerTurn = false;
                 return;
             }
 
@@ -112,9 +113,10 @@ namespace PaperSoccer
             MoveComputer(CurrentPosition, Field.Position(pop), pathToGoal);
             MovesHistory.AddRange(LastMoves);
 
+            if (IsGameOver) return;
+
             Flip();
             NumberOfMoves++;
-            IsComputerTurn = false;
         }
 
         /* Iteration is human thing. Recursion divine */

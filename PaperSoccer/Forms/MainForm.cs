@@ -33,8 +33,31 @@ namespace PaperSoccer.Forms
             FormatMoveText(_game.NumberOfMoves);
         }
 
+        private void Simulate()
+        {
+            
+            while (!_game.IsGameOver)
+            {
+                Thread.Sleep(150);
+                _game.ComputerMove();
+                UpdateMove();
+            }
+        }
+
         private void paperSoccerPanel_MouseClick(object sender, MouseEventArgs e)
         {
+            if (_game.PlayerOne.Nature == PlayerNature.Computer &&
+                _game.PlayerTwo.Nature == PlayerNature.Computer)
+                Simulate();
+
+            if (_game.CurrentPlayer.Nature == PlayerNature.Computer)
+            {
+                Thread.Sleep(250);
+                _game.ComputerMove();
+                UpdateMove();
+                return;
+            }
+
             if (e.Button != MouseButtons.Left ||
                 !_paperGraphics.Hotspots.Any(h => h.Contains(e.Location)))
             {
@@ -45,10 +68,10 @@ namespace PaperSoccer.Forms
             var clickedPosition = new Point(hotspot.Right, hotspot.Bottom);
             var selectedPosition = _paperGraphics.FieldPosition(clickedPosition);
 
-            _game.PlayerMove(selectedPosition);
+            _game.HumanPlayerMove(selectedPosition);
             UpdateMove();
 
-            if (_game.IsComputerTurn)
+            if (_game.CurrentPlayer.Nature == PlayerNature.Computer)
             {
                 Thread.Sleep(250);
                 _game.ComputerMove();
@@ -101,6 +124,13 @@ namespace PaperSoccer.Forms
             else
             {
                 moves.Text = Resources.MainForm_NoMoves;
+            }
+
+            if (_game.PlayerOne.Nature == PlayerNature.Computer &&
+                _game.PlayerTwo.Nature == PlayerNature.Computer &&
+                numberOfMoves == 0)
+            {
+                moves.Text = "Click to simulate";
             }
         }
 

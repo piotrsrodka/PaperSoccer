@@ -12,6 +12,7 @@ namespace PaperSoccer.Forms
         private int _width;
         private int _height;
 
+        private string _lastName1;
         private string _lastName2;
 
         private PlayerNature _Player1Nature; 
@@ -58,8 +59,6 @@ namespace PaperSoccer.Forms
 
         private void buttonOpponent_Click(object sender, EventArgs e)
         {
-            
-
             switch (_Player2Nature)
             {
                 case PlayerNature.Human:
@@ -96,10 +95,13 @@ namespace PaperSoccer.Forms
             switch (_Player1Nature)
             {
                 case PlayerNature.Human:
+                    _lastName1 = textBoxPlayer1Name.Text;
+                    textBoxPlayer1Name.Text = "Walter";
                     _Player1Nature = PlayerNature.Computer;
                     break;
                 case PlayerNature.Computer:
                     _Player1Nature = PlayerNature.Human;
+                    textBoxPlayer1Name.Text = _lastName1;
                     break;
             }
 
