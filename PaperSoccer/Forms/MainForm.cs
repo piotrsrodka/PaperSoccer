@@ -23,9 +23,12 @@ namespace PaperSoccer.Forms
             new NewGame(_game).ShowDialog(this);
         }
 
-        public void StartNewGame(int width, int height, PlayerNature playerNature)
+        public void StartNewGame(int width, int height, 
+            string player1Name, PlayerNature player1Nature,
+            string player2Name, PlayerNature player2Nature)
         {
-            _game = new Game(width, height, playerNature);
+            _game = new Game(width, height, player1Name, player1Nature,
+            player2Name, player2Nature);
             SetGraphics();
             FormatMoveText(_game.NumberOfMoves);
         }
@@ -74,7 +77,8 @@ namespace PaperSoccer.Forms
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _game = new Game(_game.Width, _game.Height, _game.Player.Nature);
+            _game = new Game(_game.Width, _game.Height,  _game.PlayerOne.Name, _game.PlayerOne.Nature,
+                _game.PlayerTwo.Name, _game.PlayerTwo.Nature);
             SetGraphics();
             FormatMoveText(_game.NumberOfMoves);
         }
@@ -83,6 +87,8 @@ namespace PaperSoccer.Forms
         {
             _paperGraphics = new PaperGraphics(_game, paperSoccerPanel.Width, paperSoccerPanel.Height);
             pictureBox.Location = _paperGraphics.GetBallLocation(pictureBox.Width);
+            labelPlayer1.Text = _game.PlayerOne.Name + "[" + _game.PlayerOne.Nature + "]";
+            labelPlayer2.Text = _game.PlayerTwo.Name + "[" + _game.PlayerTwo.Nature + "]";
             paperSoccerPanel.Invalidate();
         }
 

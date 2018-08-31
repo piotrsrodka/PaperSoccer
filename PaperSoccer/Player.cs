@@ -4,32 +4,13 @@ namespace PaperSoccer
 {
     public class Player
     {
-        public PlayerOrder Order { get; set; }
-        public PlayerNature Nature { get; set; }
         public string Name { get; set; }
-
-        public Player()
-        {
-            Order = PlayerOrder.First;
-            Nature = PlayerNature.Human;
-        }
-
-        public Player(PlayerNature playerNature)
-        {
-            Order = PlayerOrder.First;
-            Nature = playerNature;
-        }
+        public PlayerNature Nature { get; set; }
         
-        public void Flip()
+        public Player(string name, PlayerNature playerNature)
         {
-            if (Order == PlayerOrder.First)
-            {
-                Order = PlayerOrder.Second;                
-            }
-            else if (Order == PlayerOrder.Second)
-            {
-                Order = PlayerOrder.First;                
-            }
+            Name = name;
+            Nature = playerNature;
         }
     }
 }

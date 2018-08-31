@@ -57,7 +57,7 @@ namespace PaperSoccer
             var playerPen = GetPlayerPen(move);
             graphics.DrawLine(playerPen, DrawingPosition(move.From), DrawingPosition(move.To));
 
-            var brush = GetPlayerBrush(_game.Player.Order);
+            var brush = GetPlayerBrush(_game.PlayerTurn);
             DrawPoint(move.To, DotSize, brush, graphics);
 
             if (_game.IsGameOver)
@@ -211,7 +211,7 @@ namespace PaperSoccer
                 case WonBy.Goal:
                     {
                         Point text = DrawingPosition(0, _game.Field.Height / 3);
-                        graphics.DrawString(" Player " + _game.Player.Order + " wins", font,
+                        graphics.DrawString(" Player " + _game.PlayerTurn + " wins", font,
                             Brushes.Black, (text));
                         Point nextLine = new Point(text.X, text.Y + 100);
                         graphics.DrawString("    by Goal!", font, Brushes.Brown, (nextLine));
@@ -219,9 +219,8 @@ namespace PaperSoccer
                     break;
                 case WonBy.Suicide:
                     {
-                        _game.Player.Flip();
                         Point text = DrawingPosition(0, _game.Field.Height / 3);
-                        graphics.DrawString(" Player " + _game.Player.Order + " wins", font,
+                        graphics.DrawString(" Player " + _game.PlayerTurn + " loses", font,
                             Brushes.Black, (text));
                         Point nextLine = new Point(text.X, text.Y + 100);
                         graphics.DrawString("   by Suicide goal", font, Brushes.Black, (nextLine));
@@ -230,7 +229,7 @@ namespace PaperSoccer
                 case WonBy.Block:
                     {
                         Point text = DrawingPosition(2, _game.Field.Height / 3);
-                        graphics.DrawString(" Player " + _game.Player.Order + " wins", font,
+                        graphics.DrawString(" Player " + _game.PlayerTurn + " wins", font,
                             Brushes.Black, (text));
                         Point nextLine = new Point(text.X, text.Y + 100);
                         graphics.DrawString("   by Block!", font, Brushes.Black, (nextLine));

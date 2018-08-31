@@ -17,25 +17,43 @@ namespace PaperSoccer
         public int NumberOfMoves { get; set; }
 
         public Field Field { get; set; }
-        public Player Player { get; set; }
+        public Player PlayerOne { get; set; }
+        public Player PlayerTwo { get; set; }
+        public PlayerOrder PlayerTurn { get; set; }
         public Point CurrentPosition { get; set; }
         public List<Move> LastMoves { get; set; }
         public WonBy WonBy { get; set; }
         public List<Move> MovesHistory { get; set; }
 
-        public Game() : this(DefaultWidth, DefaultHeight, PlayerNature.Human)
+        public Game() : this(DefaultWidth, DefaultHeight, "Player 1", PlayerNature.Human,
+            "Player 2", PlayerNature.Human)
         {
         }
 
-        public Game(int width, int height, PlayerNature playerNature)
+        public Game(int width, int height, string player1Name, PlayerNature player1Nature,
+            string player2Name, PlayerNature player2Nature)
         {
             Width = width;
             Height = height;
-            Player = new Player(playerNature);
+            PlayerOne = new Player(player1Name, player1Nature);
+            PlayerTwo = new Player(player2Name, player2Nature);
+            PlayerTurn = PlayerOrder.First;
             Field = new Field(width, height);
             CurrentPosition = Field.MiddlePoint;
             MovesHistory = new List<Move>();
             LastMoves = new List<Move>();
+        }
+
+        public void Flip()
+        {
+            if (PlayerTurn == PlayerOrder.First)
+            {
+                PlayerTurn = PlayerOrder.Second;
+            }
+            else if (PlayerTurn == PlayerOrder.Second)
+            {
+                PlayerTurn = PlayerOrder.First;
+            }
         }
 
         public void PlayerMove(Point to)
@@ -52,7 +70,7 @@ namespace PaperSoccer
             Field.RemoveEdge(Field.Vertex(from), Field.Vertex(to));
             CurrentPosition = to;
             LastMoves.Clear();
-            LastMoves.Add(new Move(Player.Order, to, from));
+            LastMoves.Add(new Move(PlayerTurn, to, from));
             MovesHistory.AddRange(LastMoves);
             VictoryConditions(to);
 
@@ -64,11 +82,11 @@ namespace PaperSoccer
             
             if (Field.IsMoveIntoTheVoid(to))
             {
-                Player.Flip();
+                Flip();
                 NumberOfMoves++;
 
-                IsComputerTurn = Player.Order == PlayerOrder.Second &&
-                                  Player.Nature == PlayerNature.Computer;
+                IsComputerTurn = PlayerTurn == PlayerOrder.Second &&
+                                  PlayerTwo.Nature == PlayerNature.Computer;
             }
         }
 
@@ -80,7 +98,7 @@ namespace PaperSoccer
 
             if (pathToGoal == null)
             {
-                Player.Flip();
+                Flip();
                 WonBy = WonBy.Block;
                 IsGameOver = true;
                 IsComputerTurn = false;
@@ -94,7 +112,7 @@ namespace PaperSoccer
             MoveComputer(CurrentPosition, Field.Position(pop), pathToGoal);
             MovesHistory.AddRange(LastMoves);
 
-            Player.Flip();
+            Flip();
             NumberOfMoves++;
             IsComputerTurn = false;
         }
@@ -104,7 +122,7 @@ namespace PaperSoccer
         {
             Field.RemoveEdge(Field.Vertex(from), Field.Vertex(to));
             CurrentPosition = to;
-            LastMoves.Add(new Move(Player.Order, to, from));
+            LastMoves.Add(new Move(PlayerTurn, to, from));
             
             VictoryConditions(to);
 
@@ -131,18 +149,18 @@ namespace PaperSoccer
 
             if (isTopGoal)
             {
-                WonBy = Player.Order == PlayerOrder.First ? WonBy.Goal : WonBy.Suicide;
+                WonBy = PlayerTurn == PlayerOrder.First ? WonBy.Goal : WonBy.Suicide;
                 IsGameOver = true;
             }
             else if (isBottomGoal)
             {
-                WonBy = Player.Order == PlayerOrder.First ? WonBy.Suicide : WonBy.Goal;
+                WonBy = PlayerTurn == PlayerOrder.First ? WonBy.Suicide : WonBy.Goal;
                 IsGameOver = true;
             }
             else if (Field.DegreeOf(Field.Vertex(to)) == 0)
             {
                 WonBy = WonBy.Block;
-                Player.Flip();
+                Flip();
                 IsGameOver = true;
             }
         }

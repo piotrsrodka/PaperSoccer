@@ -12,7 +12,10 @@ namespace PaperSoccer.Forms
         private int _width;
         private int _height;
 
-        private PlayerNature _opponentPlayerNature; 
+        private string _lastName2;
+
+        private PlayerNature _Player1Nature; 
+        private PlayerNature _Player2Nature; 
 
         public NewGame(Game game)
         {
@@ -20,11 +23,15 @@ namespace PaperSoccer.Forms
             
             _width = game.Width;
             _height = game.Height;
-            _opponentPlayerNature = game.Player.Nature;
+            _Player1Nature = game.PlayerOne.Nature;
+            _Player2Nature = game.PlayerTwo.Nature;
 
             numericUpDownWidth.Value = _width == 0 ? DefaultWidth : _width;
             numericUpDownHeight.Value = _height == 0 ? DefaultHeight : _height;
-            buttonOpponent.Text = _opponentPlayerNature.ToString();
+            buttonOpponent.Text = _Player2Nature.ToString();
+            buttonPlayer1Nature.Text = _Player1Nature.ToString();
+            textBoxPlayer1Name.Text = game.PlayerOne.Name;
+            textBoxPlayer2Name.Text = game.PlayerTwo.Name;
             ActiveControl = buttonStartNewGame;
         }
 
@@ -51,17 +58,22 @@ namespace PaperSoccer.Forms
 
         private void buttonOpponent_Click(object sender, EventArgs e)
         {
-            switch (_opponentPlayerNature)
+            
+
+            switch (_Player2Nature)
             {
                 case PlayerNature.Human:
-                    _opponentPlayerNature = PlayerNature.Computer;
+                    _lastName2 = textBoxPlayer2Name.Text;
+                    _Player2Nature = PlayerNature.Computer;
+                    textBoxPlayer2Name.Text = "Walter";
                     break;
                 case PlayerNature.Computer:
-                    _opponentPlayerNature = PlayerNature.Human;
+                    _Player2Nature = PlayerNature.Human;
+                    textBoxPlayer2Name.Text = _lastName2;
                     break;
             }
 
-            buttonOpponent.Text = _opponentPlayerNature.ToString();
+            buttonOpponent.Text = _Player2Nature.ToString();
         }
 
         private void NewGame_FormClosing(object sender, FormClosingEventArgs e)
@@ -75,7 +87,23 @@ namespace PaperSoccer.Forms
             if (_height < 3 || _height > 30) _height = DefaultHeight;
 
             var parent = (MainForm) Owner;
-            parent.StartNewGame(_width, _height, _opponentPlayerNature);
+            parent.StartNewGame(_width, _height, textBoxPlayer1Name.Text, _Player1Nature,
+                textBoxPlayer2Name.Text, _Player2Nature);
+        }
+
+        private void buttonPlayer1Nature_Click(object sender, EventArgs e)
+        {
+            switch (_Player1Nature)
+            {
+                case PlayerNature.Human:
+                    _Player1Nature = PlayerNature.Computer;
+                    break;
+                case PlayerNature.Computer:
+                    _Player1Nature = PlayerNature.Human;
+                    break;
+            }
+
+            buttonPlayer1Nature.Text = _Player1Nature.ToString();
         }
     }
 }
