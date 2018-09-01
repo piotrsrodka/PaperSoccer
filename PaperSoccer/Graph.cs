@@ -6,8 +6,6 @@ namespace PaperSoccer
 {
     public class Graph
     {
-        private readonly int _vertices;
-        private int _edges;
         private readonly HashSet<int>[] _adjacencyList;
 
         public Graph(int vertices)
@@ -17,8 +15,8 @@ namespace PaperSoccer
                 throw new Exception("Number of vertices must be nonnegative");
             }
             
-            _vertices = vertices;
-            _edges = 0;
+            Vertices = vertices;
+            Edges = 0;
             _adjacencyList = new HashSet<int>[vertices];
             
             for (int w = 0; w < vertices; w++)
@@ -29,10 +27,10 @@ namespace PaperSoccer
 
         public Graph(Graph graph)
         {
-            _vertices = graph._vertices;
-            _edges = graph._edges;
+            Vertices = graph.Vertices;
+            Edges = graph.Edges;
 
-            for (int v = 0; v < _vertices; v++)
+            for (int v = 0; v < Vertices; v++)
             {
                 var reverse = new Stack<int>();
                 
@@ -48,28 +46,32 @@ namespace PaperSoccer
             }
         }
 
+        public int Vertices { get; }
+
+        public int Edges { get; private set; }
+
         public bool ExistEdge(int v, int w)
         {
-            if (v < 0 || v >= _vertices) throw new IndexOutOfRangeException();
-            if (w < 0 || w >= _vertices) throw new IndexOutOfRangeException();
+            if (v < 0 || v >= Vertices) throw new IndexOutOfRangeException();
+            if (w < 0 || w >= Vertices) throw new IndexOutOfRangeException();
 
             return _adjacencyList[v].Contains(w);
         }
 
         public void AddEdge(int v, int w)
         {
-            if (v < 0 || v >= _vertices) throw new IndexOutOfRangeException();
-            if (w < 0 || w >= _vertices) throw new IndexOutOfRangeException();
+            if (v < 0 || v >= Vertices) throw new IndexOutOfRangeException();
+            if (w < 0 || w >= Vertices) throw new IndexOutOfRangeException();
 
             _adjacencyList[v].Add(w);
             _adjacencyList[w].Add(v);
-            _edges++;
+            Edges++;
         }
 
         public void RemoveEdge(int v, int w)
         {
-            if (v < 0 || v >= _vertices) throw new IndexOutOfRangeException();
-            if (w < 0 || w >= _vertices) throw new IndexOutOfRangeException();
+            if (v < 0 || v >= Vertices) throw new IndexOutOfRangeException();
+            if (w < 0 || w >= Vertices) throw new IndexOutOfRangeException();
 
             if (_adjacencyList[v].Contains(w))
             {
@@ -81,12 +83,12 @@ namespace PaperSoccer
                 _adjacencyList[w].Remove(v);
             }
 
-            _edges--;
+            Edges--;
         }
 
         public void RemoveAllEdges(int v)
         {
-            if (v < 0 || v >= _vertices)
+            if (v < 0 || v >= Vertices)
             {
                 throw new IndexOutOfRangeException();
             }
@@ -102,17 +104,13 @@ namespace PaperSoccer
 
         public HashSet<int> GetAdjacencyList(int v) 
         {
-            if (v < 0 || v >= _vertices)
+            if (v < 0 || v >= Vertices)
             {
                 throw new IndexOutOfRangeException();
             }
 
             return _adjacencyList[v]; 
         }
-
-        public int GetVertices() { return _vertices; }
-
-        public int GetEdges() { return _edges; }
 
         public virtual int DegreeOf(int v) { return _adjacencyList[v].Count; }
     }

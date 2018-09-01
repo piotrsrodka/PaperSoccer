@@ -251,7 +251,7 @@ namespace PaperSoccer
         {
             var movePen = new Pen(Color.Gray, 1.0f);
 
-            for (int v = 0; v < _game.Field.GetVertices(); v++)
+            for (int v = 0; v < _game.Field.Vertices; v++)
             {
                 foreach (var w in _game.Field.GetAdjacencyList(v))
                 {

@@ -3,19 +3,20 @@
 namespace PaperSoccer
 {
     /// <summary>
-    /// Algorithm from Algorithms 4 by Robert Sedgewick & Kevin Wayne
+    /// Algorithm acquired from Algorithms 4 by Robert Sedgewick & Kevin Wayne
     /// </summary>
     class BreadthFirstSearch
     {
         private readonly bool[] _marked;      // marked[v] = is there an s-v path?
         private readonly int[] _edgeTo;       // edgeTo[v] = previous edge on shortest s-v path
-        private readonly int[] _distanceTo;       // distTo[v] = number of edges shortest s-v path
+        private readonly int[] _distanceTo;   // distTo[v] = number of edges shortest s-v path
 
         public BreadthFirstSearch(Graph graph, int source)
         {
-            _marked = new bool[graph.GetVertices()];
-            _distanceTo = new int[graph.GetVertices()];
-            _edgeTo = new int[graph.GetVertices()];
+            _marked = new bool[graph.Vertices];
+            _distanceTo = new int[graph.Vertices];
+            _edgeTo = new int[graph.Vertices];
+
             BfsSingleSource(graph, source);
         }
 
@@ -24,7 +25,7 @@ namespace PaperSoccer
         {
             var queue = new Queue<int>();
 
-            for (int v = 0; v < graph.GetVertices(); v++)
+            for (int v = 0; v < graph.Vertices; v++)
             {
                 _distanceTo[v] = int.MaxValue;
             }

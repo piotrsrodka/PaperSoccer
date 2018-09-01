@@ -4,16 +4,17 @@ using System.Linq;
 
 namespace PaperSoccer
 {
-    /* Field is a special kind of Graph.
+    /* Field is a kind of Graph.
      * Connection are only initialized beetween geometric adjacent points
      */
 
     public class Field : Graph
     {
-        private readonly int _width;
+        private int _graphWidth => Width + 3;
 
         public int Width { get; private set; }
         public int Height { get; private set; }
+
         public Point MiddlePoint => new Point(Width / 2, Height / 2);
 
         public Field(int width, int height) : base((width + 3) * (height + 3))
@@ -25,7 +26,6 @@ namespace PaperSoccer
 
             Width = width;
             Height = height;
-            _width = width + 3;
 
             InnerMesh(width, height);
 
@@ -34,6 +34,7 @@ namespace PaperSoccer
             {
                 AddEdge(Vertex(width / 2, 0), Vertex(p));
             }
+
             AddEdge(Vertex(width / 2 - 1, 0), Vertex(width / 2, -1));
             AddEdge(Vertex(width / 2 + 1, 0), Vertex(width / 2, -1));
 
@@ -42,6 +43,7 @@ namespace PaperSoccer
             {
                 AddEdge(Vertex(width / 2, height), Vertex(p));
             }
+
             AddEdge(Vertex(width / 2 - 1, height), Vertex(width / 2, height + 1));
             AddEdge(Vertex(width / 2 + 1, height), Vertex(width / 2, height + 1));
 
@@ -52,9 +54,11 @@ namespace PaperSoccer
             AddEdge(Vertex(width - 1, height), Vertex(width, height - 1));
         }
 
+        /* Mapping vertices into point and vice versa */
+
         public int Vertex(int x, int y)
         {
-            return (x + 1) + (y + 1) * _width;
+            return (x + 1) + (y + 1) * _graphWidth;
         }
 
         public int Vertex(Point a)
@@ -64,8 +68,10 @@ namespace PaperSoccer
 
         public Point Position(int v)
         {
-            return new Point((v % _width) - 1, v / _width - 1);
+            return new Point((v % _graphWidth) - 1, v / _graphWidth - 1);
         }
+
+        /* End mapping */
 
         public List<Point> PossibleMoves(Point position)
         {

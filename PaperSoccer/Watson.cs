@@ -85,7 +85,8 @@ namespace PaperSoccer
             }
             else // bump and move further
             {
-                MoveComputer(localGame.CurrentPosition, localGame.Field.Position(pathToGoal.Pop()), pathToGoal, goal);
+                int nextMove = pathToGoal.Pop();
+                MoveComputer(localGame.CurrentPosition, localGame.Field.Position(nextMove), pathToGoal, goal);
             }
 
             return localGame;
