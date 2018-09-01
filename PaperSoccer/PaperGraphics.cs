@@ -42,11 +42,9 @@ namespace PaperSoccer
 
         public void DrawLastMoves(Graphics graphics)
         {
-            bool isComputerBulk = _game.LastMoves.Count > 1;
-
             foreach (var move in _game.LastMoves)
             {
-                if (isComputerBulk) Thread.Sleep(100);
+                if (_game.CurrentPlayer.Nature == PlayerNature.Computer) Thread.Sleep(300);
 
                 DrawMove(move, graphics);
             }
@@ -76,8 +74,8 @@ namespace PaperSoccer
             DrawGrid(graphics);
             DrawFieldOutline(graphics);
             DrawMovesHistory(graphics);
-            DrawConnections(graphics);
-            DrawVerticesNumbers(graphics);
+            //DrawConnections(graphics);
+            //DrawVerticesNumbers(graphics);
         }
 
         public Point GetBallLocation(int ballSize)

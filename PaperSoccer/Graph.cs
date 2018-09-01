@@ -27,16 +27,16 @@ namespace PaperSoccer
             }
         }
 
-        public Graph(Graph g)
+        public Graph(Graph graph)
         {
-            _vertices = g._vertices;
-            _edges = g._edges;
+            _vertices = graph._vertices;
+            _edges = graph._edges;
 
             for (int v = 0; v < _vertices; v++)
             {
                 var reverse = new Stack<int>();
                 
-                foreach (var w in g._adjacencyList[v])
+                foreach (var w in graph._adjacencyList[v])
                 {
                     reverse.Push(w);
                 }

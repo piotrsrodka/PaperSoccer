@@ -27,6 +27,7 @@ namespace PaperSoccer.Forms
             _Player1Nature = game.PlayerOne.Nature;
             _Player2Nature = game.PlayerTwo.Nature;
 
+            
             numericUpDownWidth.Value = _width == 0 ? DefaultWidth : _width;
             numericUpDownHeight.Value = _height == 0 ? DefaultHeight : _height;
             buttonOpponent.Text = _Player2Nature.ToString();
@@ -65,10 +66,12 @@ namespace PaperSoccer.Forms
                     _lastName2 = textBoxPlayer2Name.Text;
                     _Player2Nature = PlayerNature.Computer;
                     textBoxPlayer2Name.Text = "Walter";
+                    listBox_Player2.Enabled = true;
                     break;
                 case PlayerNature.Computer:
                     _Player2Nature = PlayerNature.Human;
                     textBoxPlayer2Name.Text = _lastName2;
+                    listBox_Player2.Enabled = false;
                     break;
             }
 
@@ -85,9 +88,11 @@ namespace PaperSoccer.Forms
             if (_width < 3 || _width > 30) _width = DefaultWidth;
             if (_height < 3 || _height > 30) _height = DefaultHeight;
 
-            var parent = (MainForm) Owner;
-            parent.StartNewGame(_width, _height, textBoxPlayer1Name.Text, _Player1Nature,
+            var game = new Game(_width, _height, textBoxPlayer1Name.Text, _Player1Nature,
                 textBoxPlayer2Name.Text, _Player2Nature);
+
+            var parent = (MainForm) Owner;
+            parent.StartNewGame(game);
         }
 
         private void buttonPlayer1Nature_Click(object sender, EventArgs e)
@@ -106,6 +111,11 @@ namespace PaperSoccer.Forms
             }
 
             buttonPlayer1Nature.Text = _Player1Nature.ToString();
+        }
+
+        private void listBox_Player2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            textBoxPlayer2Name.Text = listBox_Player2.SelectedItem.ToString();
         }
     }
 }

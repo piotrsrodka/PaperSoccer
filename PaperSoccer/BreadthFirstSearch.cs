@@ -11,20 +11,20 @@ namespace PaperSoccer
         private readonly int[] _edgeTo;       // edgeTo[v] = previous edge on shortest s-v path
         private readonly int[] _distanceTo;       // distTo[v] = number of edges shortest s-v path
 
-        public BreadthFirstSearch(Graph g, int s)
+        public BreadthFirstSearch(Graph graph, int source)
         {
-            _marked = new bool[g.GetVertices()];
-            _distanceTo = new int[g.GetVertices()];
-            _edgeTo = new int[g.GetVertices()];
-            BfsSingleSource(g, s);
+            _marked = new bool[graph.GetVertices()];
+            _distanceTo = new int[graph.GetVertices()];
+            _edgeTo = new int[graph.GetVertices()];
+            BfsSingleSource(graph, source);
         }
 
         // breadth-first search from a single source
-        private void BfsSingleSource(Graph g, int source)
+        private void BfsSingleSource(Graph graph, int source)
         {
             var queue = new Queue<int>();
 
-            for (int v = 0; v < g.GetVertices(); v++)
+            for (int v = 0; v < graph.GetVertices(); v++)
             {
                 _distanceTo[v] = int.MaxValue;
             }
@@ -37,7 +37,7 @@ namespace PaperSoccer
             {
                 int v = queue.Dequeue();
 
-                foreach (int w in g.GetAdjacencyList(v))
+                foreach (int w in graph.GetAdjacencyList(v))
                 {
                     if (!_marked[w])
                     {

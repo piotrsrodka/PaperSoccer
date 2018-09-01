@@ -45,6 +45,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.buttonPlayer1Nature = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
+            this.listBox_Player2 = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHeight)).BeginInit();
@@ -59,7 +60,7 @@
             0,
             0,
             0});
-            this.numericUpDownWidth.Location = new System.Drawing.Point(140, 31);
+            this.numericUpDownWidth.Location = new System.Drawing.Point(218, 31);
             this.numericUpDownWidth.Maximum = new decimal(new int[] {
             24,
             0,
@@ -84,7 +85,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(33, 33);
+            this.label1.Location = new System.Drawing.Point(111, 33);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(101, 17);
             this.label1.TabIndex = 1;
@@ -100,14 +101,14 @@
             this.groupBox1.Controls.Add(this.numericUpDownWidth);
             this.groupBox1.Location = new System.Drawing.Point(12, 206);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(209, 152);
+            this.groupBox1.Size = new System.Drawing.Size(352, 152);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Field Parameters";
             // 
             // buttonStartNewGame
             // 
-            this.buttonStartNewGame.Location = new System.Drawing.Point(107, 108);
+            this.buttonStartNewGame.Location = new System.Drawing.Point(185, 108);
             this.buttonStartNewGame.Name = "buttonStartNewGame";
             this.buttonStartNewGame.Size = new System.Drawing.Size(75, 27);
             this.buttonStartNewGame.TabIndex = 5;
@@ -117,7 +118,7 @@
             // 
             // buttonDefault
             // 
-            this.buttonDefault.Location = new System.Drawing.Point(21, 108);
+            this.buttonDefault.Location = new System.Drawing.Point(99, 108);
             this.buttonDefault.Name = "buttonDefault";
             this.buttonDefault.Size = new System.Drawing.Size(75, 27);
             this.buttonDefault.TabIndex = 4;
@@ -128,7 +129,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(50, 65);
+            this.label2.Location = new System.Drawing.Point(128, 65);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(84, 17);
             this.label2.TabIndex = 3;
@@ -141,7 +142,7 @@
             0,
             0,
             0});
-            this.numericUpDownHeight.Location = new System.Drawing.Point(140, 63);
+            this.numericUpDownHeight.Location = new System.Drawing.Point(218, 63);
             this.numericUpDownHeight.Maximum = new decimal(new int[] {
             30,
             0,
@@ -165,13 +166,14 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.listBox_Player2);
             this.groupBox2.Controls.Add(this.textBoxPlayer2Name);
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.buttonOpponent);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Location = new System.Drawing.Point(12, 109);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(209, 91);
+            this.groupBox2.Size = new System.Drawing.Size(352, 91);
             this.groupBox2.TabIndex = 3;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Player 2 (opponent)";
@@ -197,7 +199,7 @@
             // 
             this.buttonOpponent.Location = new System.Drawing.Point(82, 50);
             this.buttonOpponent.Name = "buttonOpponent";
-            this.buttonOpponent.Size = new System.Drawing.Size(98, 27);
+            this.buttonOpponent.Size = new System.Drawing.Size(100, 27);
             this.buttonOpponent.TabIndex = 6;
             this.buttonOpponent.Text = "Human";
             this.buttonOpponent.UseVisualStyleBackColor = true;
@@ -220,7 +222,7 @@
             this.groupBox3.Controls.Add(this.label6);
             this.groupBox3.Location = new System.Drawing.Point(12, 12);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(209, 91);
+            this.groupBox3.Size = new System.Drawing.Size(352, 91);
             this.groupBox3.TabIndex = 9;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Player 1";
@@ -229,7 +231,7 @@
             // 
             this.textBoxPlayer1Name.Location = new System.Drawing.Point(82, 21);
             this.textBoxPlayer1Name.Name = "textBoxPlayer1Name";
-            this.textBoxPlayer1Name.Size = new System.Drawing.Size(100, 22);
+            this.textBoxPlayer1Name.Size = new System.Drawing.Size(98, 22);
             this.textBoxPlayer1Name.TabIndex = 8;
             this.textBoxPlayer1Name.Text = "Player 1";
             // 
@@ -261,11 +263,25 @@
             this.label6.TabIndex = 0;
             this.label6.Text = "Nature";
             // 
+            // listBox_Player2
+            // 
+            this.listBox_Player2.Enabled = false;
+            this.listBox_Player2.FormattingEnabled = true;
+            this.listBox_Player2.ItemHeight = 16;
+            this.listBox_Player2.Items.AddRange(new object[] {
+            "Walter",
+            "Watson"});
+            this.listBox_Player2.Location = new System.Drawing.Point(208, 17);
+            this.listBox_Player2.Name = "listBox_Player2";
+            this.listBox_Player2.Size = new System.Drawing.Size(120, 68);
+            this.listBox_Player2.TabIndex = 9;
+            this.listBox_Player2.SelectedIndexChanged += new System.EventHandler(this.listBox_Player2_SelectedIndexChanged);
+            // 
             // NewGame
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(232, 371);
+            this.ClientSize = new System.Drawing.Size(373, 371);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -306,5 +322,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button buttonPlayer1Nature;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ListBox listBox_Player2;
     }
 }

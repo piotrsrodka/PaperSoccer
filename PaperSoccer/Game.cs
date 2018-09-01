@@ -30,6 +30,19 @@ namespace PaperSoccer
         {
         }
 
+        public Game(Game game)
+        {
+            Width = game.Width;
+            Height = game.Height;
+            PlayerOne = new Player(game.PlayerOne.Name, game.PlayerOne.Nature);
+            PlayerTwo = new Player(game.PlayerTwo.Name, game.PlayerTwo.Nature);
+            PlayerTurn = PlayerOrder.First;
+            Field = new Field(game.Width, game.Height);
+            CurrentPosition = Field.MiddlePoint;
+            MovesHistory = new List<Move>();
+            LastMoves = new List<Move>();
+        }
+
         public Game(int width, int height, string player1Name, PlayerNature player1Nature,
             string player2Name, PlayerNature player2Nature)
         {
@@ -95,8 +108,18 @@ namespace PaperSoccer
 
             var goal = PlayerTurn == PlayerOrder.First ? topGoal : bottomGoal;
 
-            IComputer computer = new Walter();
-            Stack<int> pathToGoal = computer.GetPathToGoal(Field, CurrentPosition, goal);
+            IComputer computer;
+
+            if (CurrentPlayer.Name == "Watson")
+            {
+                computer = new Watson(this);
+            }
+            else
+            {
+                computer = new Walter();
+            }
+
+            var pathToGoal = computer.GetPathToGoal(Field, CurrentPosition, goal);
 
             if (pathToGoal == null)
             {
@@ -106,11 +129,11 @@ namespace PaperSoccer
                 return;
             }
 
-            int pop = pathToGoal.Pop();
-            pop = pathToGoal.Pop();
+            int goTo = pathToGoal.Pop(); // First item is current position - ignoring
+            goTo = pathToGoal.Pop();
 
             LastMoves.Clear();
-            MoveComputer(CurrentPosition, Field.Position(pop), pathToGoal);
+            MoveComputer(CurrentPosition, Field.Position(goTo), pathToGoal);
             MovesHistory.AddRange(LastMoves);
 
             if (IsGameOver) return;

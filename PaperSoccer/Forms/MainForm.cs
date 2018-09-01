@@ -23,25 +23,11 @@ namespace PaperSoccer.Forms
             new NewGame(_game).ShowDialog(this);
         }
 
-        public void StartNewGame(int width, int height, 
-            string player1Name, PlayerNature player1Nature,
-            string player2Name, PlayerNature player2Nature)
+        public void StartNewGame(Game game)
         {
-            _game = new Game(width, height, player1Name, player1Nature,
-            player2Name, player2Nature);
+            _game = game;
             SetGraphics();
             FormatMoveText(_game.NumberOfMoves);
-        }
-
-        private void Simulate()
-        {
-            
-            while (!_game.IsGameOver)
-            {
-                Thread.Sleep(150);
-                _game.ComputerMove();
-                UpdateMove();
-            }
         }
 
         private void paperSoccerPanel_MouseClick(object sender, MouseEventArgs e)
@@ -52,7 +38,6 @@ namespace PaperSoccer.Forms
 
             if (_game.CurrentPlayer.Nature == PlayerNature.Computer)
             {
-                Thread.Sleep(250);
                 _game.ComputerMove();
                 UpdateMove();
                 return;
@@ -73,7 +58,15 @@ namespace PaperSoccer.Forms
 
             if (_game.CurrentPlayer.Nature == PlayerNature.Computer)
             {
-                Thread.Sleep(250);
+                _game.ComputerMove();
+                UpdateMove();
+            }
+        }
+
+        private void Simulate()
+        {
+            while (!_game.IsGameOver)
+            {
                 _game.ComputerMove();
                 UpdateMove();
             }
@@ -100,8 +93,7 @@ namespace PaperSoccer.Forms
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _game = new Game(_game.Width, _game.Height,  _game.PlayerOne.Name, _game.PlayerOne.Nature,
-                _game.PlayerTwo.Name, _game.PlayerTwo.Nature);
+            _game = new Game(_game);
             SetGraphics();
             FormatMoveText(_game.NumberOfMoves);
         }
